@@ -34,11 +34,13 @@ var (
 	clipFlag bool
 	getCmd   = &cobra.Command{
 		Use:   "get",
-		Short: "A brief description of your command",
+		Short: "Command for get your pass by name",
 		Long:  `Usage: pwm get note_name`,
 		Run: func(_ *cobra.Command, args []string) {
-			// TODO: validate
-
+			if len(args) != 1 {
+				fmt.Println("invalid params; use pwm help get")
+				return
+			}
 			name := args[0]
 			note, err := storageInstance.GetNoteByName(name)
 			if err != nil {

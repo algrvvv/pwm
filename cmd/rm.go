@@ -22,6 +22,8 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 
 	"github.com/algrvvv/pwm/log"
@@ -29,10 +31,13 @@ import (
 
 // rmCmd represents the rm command
 var rmCmd = &cobra.Command{
-	Use:   "rm",
-	Short: "A brief description of your command",
-	Long:  `Usage: `,
+	Use:     "rm",
+	Short:   "Remove your note by name",
+	Example: "Usage: pwm rm note_name",
 	Run: func(_ *cobra.Command, args []string) {
+		if len(args) != 1 {
+			fmt.Println("invalid args; use pwm help rm")
+		}
 		name := args[0]
 
 		err := storageInstance.DeleteNoteByName(name)

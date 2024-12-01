@@ -35,9 +35,9 @@ import (
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "A brief description of your command",
-	Long:  `Usage: pwm list`,
+	Use:     "list",
+	Short:   "Show all your notes",
+	Example: "pwm list",
 	Run: func(_ *cobra.Command, args []string) {
 		notes, err := storageInstance.GetNotes()
 		if err != nil {

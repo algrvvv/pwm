@@ -22,6 +22,8 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 
 	"github.com/algrvvv/pwm/gpg"
@@ -31,11 +33,14 @@ import (
 
 // storeCmd represents the store command
 var storeCmd = &cobra.Command{
-	Use:   "store",
-	Short: "store new data",
-	Long:  `Usage: pwm store name_note "some_string". some_string can be password or another string`,
+	Use:     "store",
+	Short:   "Add new note",
+	Example: `Usage: pwm store name_note "some_string". some_string can be password or another note`,
 	Run: func(_ *cobra.Command, args []string) {
-		// TODO: validate
+		if len(args) != 2 {
+			fmt.Println("invalid args; use pwm help store")
+			return
+		}
 
 		name, value := args[0], args[1]
 
