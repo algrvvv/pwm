@@ -22,11 +22,15 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
 
+	"github.com/algrvvv/pwm/gpg"
 	"github.com/algrvvv/pwm/log"
+	"github.com/algrvvv/pwm/utils"
 )
 
 // getCmd represents the get command
@@ -42,31 +46,33 @@ var (
 				return
 			}
 			name := args[0]
+
 			note, err := storageInstance.GetNoteByName(name)
 			if err != nil {
+				if errors.Is(err, sql.ErrNoRows) {
+					log.Infof("Note by name %s not found\n", log.USF(name))
+					return
+				}
 				cobra.CheckErr(err)
 			}
 
+			decryptedValue, err := gpg.Decrypt(note.Value)
+			if err != nil {
+				fmt.Printf("failed to decrypt data: %v\n", err)
+				return
+			}
+
 			if clipFlag {
-				fmt.Println("copy")
+				utils.Copy(decryptedValue)
 			}
 
 			log.Infof("note with name %s founded\n", log.USF(name))
-			fmt.Printf("%s: %s\n", note.Name, note.Value)
+			fmt.Printf("%s: %s\n", note.Name, decryptedValue)
 		},
 	}
 )
 
 func init() {
 	rootCmd.AddCommand(getCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// getCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	getCmd.Flags().BoolVarP(&clipFlag, "clip", "c", false, "Also save to clipboard")
+	getCmd.Flags().BoolVarP(&clipFlag, "clip", "c", false, "also save to clipboard")
 }
