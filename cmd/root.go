@@ -27,6 +27,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"golang.design/x/clipboard"
 
 	"github.com/algrvvv/pwm/database"
 	"github.com/algrvvv/pwm/storage"
@@ -75,18 +76,10 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
+	cobra.OnInitialize(initConfig, initClipboard)
 
 	rootCmd.PersistentFlags().
 		StringVar(&cfgFile, "config", "", "config file (default is $HOME/.pwm.yml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func initConfig() {
@@ -105,5 +98,11 @@ func initConfig() {
 	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err != nil {
 		cobra.CheckErr(err)
+	}
+}
+
+func initClipboard() {
+	if err := clipboard.Init(); err != nil {
+		panic("failed to init clipboard: " + err.Error())
 	}
 }
