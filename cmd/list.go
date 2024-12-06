@@ -44,11 +44,18 @@ var listCmd = &cobra.Command{
 			cobra.CheckErr(err)
 		}
 
+		var search string
+		if len(args) == 1 {
+			search = args[0]
+		}
+
 		// реализация через использование команды less
 		var result strings.Builder
 		result.WriteString(log.Sinfo("List of your notes:\n\n"))
 		for i, note := range notes {
-			result.WriteString(fmt.Sprintf("\t%s. %s\n", log.USF(i+1), note.Name))
+			if search == "" || (search != "" && strings.Contains(note.Name, search)) {
+				result.WriteString(fmt.Sprintf("\t%s. %s\n", log.USF(i+1), note.Name))
+			}
 		}
 
 		cmd := exec.Command("less")
