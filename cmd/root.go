@@ -22,8 +22,10 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -43,7 +45,7 @@ var (
 		Short: "password manager",
 		Long:  `pwm - Password manager`,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			if cmd.Name() == "init" {
+			if slices.Contains([]string{"init", "help", "version"}, cmd.Name()) {
 				return nil
 			}
 
@@ -83,6 +85,13 @@ func init() {
 }
 
 func initConfig() {
+	cmd, _, err := rootCmd.Find(os.Args[1:])
+	cobra.CheckErr(err)
+
+	if slices.Contains([]string{"init", "help", "version"}, cmd.Name()) {
+		return
+	}
+
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
@@ -95,6 +104,7 @@ func initConfig() {
 		viper.SetConfigName("config")
 	}
 
+	fmt.Println()
 	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err != nil {
 		cobra.CheckErr(err)
