@@ -74,8 +74,6 @@ var initCmd = &cobra.Command{
 			break
 		}
 
-		fmt.Println("config: ", config)
-
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
@@ -87,7 +85,6 @@ var initCmd = &cobra.Command{
 		}
 
 		configPath := filepath.Join(configDir, "config.yml")
-		fmt.Println("got path: " + configPath)
 
 		viper.SetConfigFile(configPath)
 		viper.Set("gpg_user", config.GPGUser)
