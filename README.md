@@ -11,7 +11,7 @@ gpg --full-generate-key
 ## Install
 
 ```shell
-go install https://github.com/algrvvv/pwm.git
+go install github.com/algrvvv/pwm@latest
 ```
 
 ```shell
