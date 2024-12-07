@@ -12,6 +12,14 @@ go install https://github.com/algrvvv/pwm.git
 pwm init
 ```
 
+## Auto completion
+
+```shell
+pwm completion zsh > ~/tmp/pwm
+# It's better to put this command in your shell configuration, for example ~/.zshrc
+source ~/tmp/pwm
+```
+
 ## See usage
 
 To see available commands use:
