@@ -37,9 +37,10 @@ import (
 var (
 	clipFlag bool
 	getCmd   = &cobra.Command{
-		Use:   "get",
-		Short: "Command for get your pass by name",
-		Long:  `Usage: pwm get note_name`,
+		Use:               "get",
+		Short:             "Command for get your pass by name",
+		Long:              `Usage: pwm get note_name`,
+		ValidArgsFunction: GetValidArgs,
 		Run: func(_ *cobra.Command, args []string) {
 			if len(args) != 1 {
 				fmt.Println("invalid params; use pwm help get")

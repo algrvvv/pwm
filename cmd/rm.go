@@ -31,9 +31,10 @@ import (
 
 // rmCmd represents the rm command
 var rmCmd = &cobra.Command{
-	Use:     "rm",
-	Short:   "Remove your note by name",
-	Example: "Usage: pwm rm note_name",
+	Use:               "rm",
+	Short:             "Remove your note by name",
+	Example:           "Usage: pwm rm note_name",
+	ValidArgsFunction: GetValidArgs,
 	Run: func(_ *cobra.Command, args []string) {
 		if len(args) != 1 {
 			fmt.Println("invalid args; use pwm help rm")

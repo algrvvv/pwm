@@ -35,9 +35,10 @@ import (
 
 // copyCmd represents the copy command
 var copyCmd = &cobra.Command{
-	Use:     "copy",
-	Short:   "Get and save to clipboard note by name",
-	Example: "Usage: pwm copy note_name",
+	Use:               "copy",
+	Short:             "Get and save to clipboard note by name",
+	Example:           "Usage: pwm copy note_name",
+	ValidArgsFunction: GetValidArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
 			fmt.Println("invalid params; use pwm help copy")
