@@ -52,3 +52,20 @@ func (s *SQLiteStorage) DeleteNoteByName(name string) error {
 	_, err := database.C.Exec(query, name)
 	return err
 }
+
+// TODO: потом можно сделать динамическое чтение из файла миграции
+// просто запускать команду make migration-up не вариант, так как может не быть
+// установлен make или утилита для миграций, которая используется для выполнения миграций
+// Поэтому пока хардкодим
+func (s *SQLiteStorage) Migrate() error {
+	query := `create table if not exists notes
+  (
+    id integer primary key autoincrement,
+    name text unique not null,
+    value text not null,
+    created_at timestamp default current_timestamp not null
+  )
+  `
+	_, err := database.C.Exec(query)
+	return err
+}

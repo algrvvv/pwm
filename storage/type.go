@@ -14,4 +14,5 @@ type Storage interface {
 	GetNoteByName(name string) (note Note, err error)
 	SaveNote(note Note) (err error)
 	DeleteNoteByName(name string) (err error)
+	Migrate() (err error)
 }
