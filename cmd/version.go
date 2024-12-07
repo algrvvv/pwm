@@ -30,7 +30,7 @@ import (
 const (
 	art     = " _ ____      ___ __ ___  \n| '_ \\ \\ /\\ / / '_ ` _ \\ \n| |_) \\ V  V /| | | | | |\n| .__/ \\_/\\_/ |_| |_| |_|\n|_|                      "
 	desc    = "Simple password and more notes manager"
-	version = "v1.3"
+	version = "v1.4"
 )
 
 // versionCmd represents the version command
