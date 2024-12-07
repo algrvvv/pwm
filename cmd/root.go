@@ -22,7 +22,6 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"slices"
@@ -104,7 +103,6 @@ func initConfig() {
 		viper.SetConfigName("config")
 	}
 
-	fmt.Println()
 	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err != nil {
 		cobra.CheckErr(err)
