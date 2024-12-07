@@ -86,7 +86,7 @@ var (
 func init() {
 	rootCmd.AddCommand(generateCmd)
 
-	generateCmd.Flags().IntVarP(&passLen, "len", "l", 12, "password len. default: 12")
+	generateCmd.Flags().IntVarP(&passLen, "len", "l", 12, "password len.")
 	generateCmd.Flags().
 		BoolVarP(&withoutUppers, "without-uppers", "U", false, "dont use upper case symbols")
 	generateCmd.Flags().
