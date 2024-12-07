@@ -2,6 +2,12 @@
 
 PWM - simple terminal password and something more manager
 
+## Preparation
+
+```shell
+gpg --full-generate-key
+```
+
 ## Install
 
 ```shell
