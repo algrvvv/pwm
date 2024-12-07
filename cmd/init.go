@@ -31,6 +31,9 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/algrvvv/pwm/database"
+	"github.com/algrvvv/pwm/storage"
 )
 
 type Config struct {
@@ -98,6 +101,13 @@ var initCmd = &cobra.Command{
 			return
 		}
 		cobra.CheckErr(f.Close())
+
+		// выполняем миграции
+		err = database.Open()
+		cobra.CheckErr(err)
+		storageInstance = storage.NewSqliteStorage()
+		err = storageInstance.Migrate()
+		cobra.CheckErr(err)
 	},
 }
 
