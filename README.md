@@ -1,4 +1,4 @@
-# PWM by algrvvv
+# About
 
 PWM - simple terminal password and something more manager
 
