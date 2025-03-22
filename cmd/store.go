@@ -32,31 +32,38 @@ import (
 )
 
 // storeCmd represents the store command
-var storeCmd = &cobra.Command{
-	Use:     "store",
-	Short:   "Add new note",
-	Example: `Usage: pwm store name_note "some_string". some_string can be password or another note`,
-	Run: func(_ *cobra.Command, args []string) {
-		if len(args) != 2 {
-			fmt.Println("invalid args; use pwm help store")
-			return
-		}
+var (
+	withoutPassword bool
+	storeCmd        = &cobra.Command{
+		Use:     "store",
+		Short:   "Add new note",
+		Example: `Usage: pwm store name_note "some_string". some_string can be password or another note`,
+		Run: func(_ *cobra.Command, args []string) {
+			if len(args) != 2 {
+				fmt.Println("invalid args; use pwm help store")
+				return
+			}
 
-		name, value := args[0], args[1]
+			name, value := args[0], args[1]
 
-		encryptedValue, err := gpg.Encrypt(value)
-		if err != nil {
-			cobra.CheckErr(err)
-		}
+			encryptedValue := value
+			if !withoutPassword {
+				var err error
+				encryptedValue, err = gpg.Encrypt(value)
+				if err != nil {
+					cobra.CheckErr(err)
+				}
+			}
 
-		note := storage.Note{Name: name, Value: encryptedValue}
-		if err := storageInstance.SaveNote(note); err != nil {
-			cobra.CheckErr(err)
-		}
-		// un := color.New(color.Underline).Sprint(name)
-		log.Infof("note with name %s saved\n", log.USF(name))
-	},
-}
+			note := storage.Note{Name: name, Value: encryptedValue, UsePassword: !withoutPassword}
+			if err := storageInstance.SaveNote(note); err != nil {
+				cobra.CheckErr(err)
+			}
+			// un := color.New(color.Underline).Sprint(name)
+			log.Infof("note with name %s saved\n", log.USF(name))
+		},
+	}
+)
 
 func init() {
 	rootCmd.AddCommand(storeCmd)
@@ -69,5 +76,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// storeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	storeCmd.Flags().BoolVarP(&withoutPassword, "without-password", "W", false, "dont use password for encrypt")
 }

@@ -57,10 +57,14 @@ var (
 				cobra.CheckErr(err)
 			}
 
-			decryptedValue, err := gpg.Decrypt(note.Value)
-			if err != nil {
-				fmt.Printf("failed to decrypt data: %v\n", err)
-				return
+			decryptedValue := note.Value
+			if note.UsePassword {
+				var err error
+				decryptedValue, err = gpg.Decrypt(note.Value)
+				if err != nil {
+					fmt.Printf("failed to decrypt data: %v\n", err)
+					return
+				}
 			}
 
 			if clipFlag {

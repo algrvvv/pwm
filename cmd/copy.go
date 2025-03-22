@@ -55,10 +55,13 @@ var copyCmd = &cobra.Command{
 			cobra.CheckErr(err)
 		}
 
-		decryptedValue, err := gpg.Decrypt(note.Value)
-		if err != nil {
-			fmt.Printf("failed to decrypt data: %v\n", err)
-			return
+		decryptedValue := note.Value
+		if note.UsePassword {
+			decryptedValue, err = gpg.Decrypt(note.Value)
+			if err != nil {
+				fmt.Printf("failed to decrypt data: %v\n", err)
+				return
+			}
 		}
 
 		utils.Copy(decryptedValue)

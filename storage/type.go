@@ -3,10 +3,11 @@ package storage
 import "time"
 
 type Note struct {
-	ID        int
-	Name      string
-	Value     string
-	CreatedAt time.Time
+	ID          int
+	Name        string
+	Value       string
+	UsePassword bool
+	CreatedAt   time.Time
 }
 
 type Storage interface {

@@ -15,7 +15,7 @@ func NewSqliteStorage() Storage {
 func (s *SQLiteStorage) GetNotes() ([]Note, error) {
 	var notes []Note
 
-	query := "select id, name, value, created_at from notes"
+	query := "select id, name, value, use_password, created_at from notes"
 	rows, err := database.C.Query(query)
 	if err != nil {
 		return notes, err
@@ -24,7 +24,7 @@ func (s *SQLiteStorage) GetNotes() ([]Note, error) {
 
 	for rows.Next() {
 		var n Note
-		if err := rows.Scan(&n.ID, &n.Name, &n.Value, &n.CreatedAt); err != nil {
+		if err := rows.Scan(&n.ID, &n.Name, &n.Value, &n.UsePassword, &n.CreatedAt); err != nil {
 			return notes, err
 		}
 
@@ -36,14 +36,14 @@ func (s *SQLiteStorage) GetNotes() ([]Note, error) {
 
 func (s *SQLiteStorage) GetNoteByName(name string) (Note, error) {
 	var n Note
-	query := "select id, name, value, created_at from notes where name = ?"
-	err := database.C.QueryRow(query, name).Scan(&n.ID, &n.Name, &n.Value, &n.CreatedAt)
+	query := "select id, name, value, use_password, created_at from notes where name = ?"
+	err := database.C.QueryRow(query, name).Scan(&n.ID, &n.Name, &n.Value, &n.UsePassword, &n.CreatedAt)
 	return n, err
 }
 
 func (s *SQLiteStorage) SaveNote(note Note) error {
-	query := "insert or replace into notes(name, value) values(?, ?)"
-	_, err := database.C.Exec(query, note.Name, note.Value)
+	query := "insert or replace into notes(name, value, use_password) values(?, ?, ?)"
+	_, err := database.C.Exec(query, note.Name, note.Value, note.UsePassword)
 	return err
 }
 
